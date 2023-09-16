@@ -6,7 +6,7 @@ openai.api_key = API_KEY
 response = openai.ChatCompletion.create(
     model = "gpt-3.5-turbo",
     messages= [
-        {"role": "user", "content": "What is the difference between Celsius and Fahrenheit?"}
+        {"role": "user", "content": "generate a motivational Quote"}
     ]
 )
 
