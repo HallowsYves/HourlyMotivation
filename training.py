@@ -5,6 +5,7 @@ import re
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
+from gensim.models import word2vec
 from sklearn.model_selection import train_test_split
 
 # SETUP
@@ -14,7 +15,8 @@ dataset.drop('Quote-url', inplace=True, axis=1)
 dataset.drop('Unnamed: 0', inplace=True, axis=1)
 
 # MODEL 
-model = gensim.models.word2vec.load('word2vec_model.binclear')
+model = gensim.models.Word2Vec(dataset, min_count=1,
+                               vector_size=100, window=5)
 
 x = dataset['Category']
 y = dataset['Quote']
