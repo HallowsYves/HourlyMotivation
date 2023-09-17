@@ -10,4 +10,12 @@ response = openai.ChatCompletion.create(
     ]
 )
 
+
+img_response = openai.Image.create(
+    prompt= response['choices'][0]['message']['content'],
+    n=1,
+    size="1024x1024",
+)
+img_url = img_response['data'][0]['url']
+print(img_url)
 print(response)
