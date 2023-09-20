@@ -1,13 +1,11 @@
 import openai
 import os
-import time
 import urllib
-import pygame
-import textwrap
+import time
 from datetime import datetime
 from textwrap import fill
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
-pygame.font.init()
 
 #SETUP
 API_KEY = open("API_KEY", "r").read()
@@ -20,9 +18,9 @@ response = openai.ChatCompletion.create(
         {"role": "user", "content": "generate a motivational Quote"}
     ]
 )
-quote = response['choices'][0]['message']['content']
-true_quote = fill(quote,20)
 
+quote = response['choices'][0]['message']['content']
+formatted_quote = fill(quote,20)
 # IMG GEN
 img_response = openai.Image.create(
     prompt= "Beautiful Nature background",
@@ -33,29 +31,21 @@ img_url = img_response['data'][0]['url']
 file_name = str(datetime.now()) + ".png"
 
 # SAVE IMG
-folder_path = "/home/yves/HourlyMotivation/Media/Images"
+folder_path = "/Users/hallowsyves/Documents/HourlyMotivation/Media/Images"
 file_path = os.path.join(folder_path, file_name)
 urllib.request.urlretrieve(img_url, file_path)
 
+
 # LOAD IMG
-def center_text(surface, text):
-    text_rect = text.get_rect()
-    surface_rect = surface.get_rect()
+image_ = Image.open(file_path)
+image_.putalpha(127)
+image_.filter(ImageFilter.GaussianBlur(5))
+image_load = ImageDraw.Draw(image_)
+# LOAD FONT
 
-    text_x = (surface_rect.width - text_rect.width) // 2
-    text_y = (surface_rect.height - text_rect.height) // 2
-
-    surface.blit(text, (text_x, text_y))
-
-
-
-surface = pygame.image.load(file_path)
-font = pygame.font.SysFont("Arial", 20)
-text = font.render(quote, True, (0,0,0))
-center_text(surface, text)
-
-
-
-pygame.image.save(surface, "output.png")
+times_new = ImageFont.truetype('/Users/hallowsyves/Documents/HourlyMotivation/Fonts/AUGUSTUS.TTF', 25)
+image_load.text((60, 50), formatted_quote, fill=(255,255,255), font=times_new)
+image_.show()
+image_.save('output.png')
 
 print(img_url)
