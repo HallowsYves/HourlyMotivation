@@ -36,7 +36,7 @@ file_path = os.path.join(folder_path, file_name)
 urllib.request.urlretrieve(img_url, file_path)
 
 
-# LOAD IMG
+# LOAD IMG a
 image_ = Image.open(file_path)
 image_.putalpha(127)
 image_.filter(ImageFilter.GaussianBlur(5))
