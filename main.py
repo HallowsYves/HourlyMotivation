@@ -36,15 +36,16 @@ file_path = os.path.join(folder_path, file_name)
 urllib.request.urlretrieve(img_url, file_path)
 
 
-# LOAD IMG a
+# LOAD IMG 
 image_ = Image.open(file_path)
 image_.putalpha(127)
 image_.filter(ImageFilter.GaussianBlur(5))
 image_load = ImageDraw.Draw(image_)
-# LOAD FONT
 
+
+# LOAD FONT
 times_new = ImageFont.truetype('/Users/hallowsyves/Documents/HourlyMotivation/Fonts/AUGUSTUS.TTF', 25)
-image_load.text((60, 50), formatted_quote, fill=(255,255,255), font=times_new)
+image_load.text((128, 256), formatted_quote, fill=(255,255,255), font=times_new)
 image_.show()
 image_.save('output.png')
 
