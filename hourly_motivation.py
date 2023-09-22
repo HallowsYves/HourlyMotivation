@@ -1,8 +1,6 @@
 import numpy as np
 import time
 import openai
-import google.generativeai as palm
-import pprint
 import os
 import urllib
 from datetime import datetime
@@ -13,21 +11,16 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 API_KEY = open("API_KEY", "r").read()
 openai.api_key = API_KEY
 
-PALM_KEY = open("PALM_KEY", "r").read()
-palm.configure(api_key=PALM_KEY)
-
-models = [m for m in palm.list_models() if 'generateText' in m.supported_generation_methods]
-model = models[0].name
-
-def generate_quote(usr_prompt):
-    quote = palm.generate_text(
-        model=model,
-        prompt=usr_prompt,
-        temperature=0.8,
-        max_output_tokens=300,
+def generate_quote(prompt):
+    response = openai.ChatCompletion.create(
+    model = "gpt-3.5-turbo",
+    messages= [
+        {"role": "user", "content": prompt}
+        ]
     )
-    formatted_quote = fill(quote.result, 20)
-    return formatted_quote
+    gen_response = response['choices'][0]['message']['content']
+    formatted_response = fill(gen_response,20)
+    return formatted_response
 
 def generate_image(usr_prompt):
     """Generate & Return the Image to the user"""
