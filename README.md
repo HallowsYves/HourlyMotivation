@@ -9,5 +9,5 @@
 ![](https://github.com/HallowsYves/HourlyMotivation/blob/main/Media/Images/2023-09-21%2021%3A45%3A45.225856.png)
 
 ### STILL UNDER CONSTRUCTION 
-Please come back soon!
-![](https://github.com/HallowsYves/HourlyMotivation/blob/main/Media/Gifs/under_construction.gif)
+
+![Please come back soon!](https://github.com/HallowsYves/HourlyMotivation/blob/main/Media/Gifs/under_construction.gif)
