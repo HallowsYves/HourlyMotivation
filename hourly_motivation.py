@@ -1,8 +1,6 @@
 import numpy as np
 import time
-import random
 import openai
-import string
 import google.generativeai as palm
 import pprint
 import os
@@ -15,10 +13,8 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 API_KEY = open("API_KEY", "r").read()
 openai.api_key = API_KEY
 
-
 PALM_KEY = open("PALM_KEY", "r").read()
 palm.configure(api_key=PALM_KEY)
-
 
 models = [m for m in palm.list_models() if 'generateText' in m.supported_generation_methods]
 model = models[0].name
@@ -27,12 +23,10 @@ def generate_quote(usr_prompt):
     quote = palm.generate_text(
         model=model,
         prompt=usr_prompt,
-        candidate_count=2,
-        temperature=1.0,
-        max_output_tokens=800,
+        temperature=0.8,
+        max_output_tokens=300,
     )
     formatted_quote = fill(quote.result, 20)
-    save_quote(quote.result, "quotes.txt")
     return formatted_quote
 
 def generate_image(usr_prompt):
@@ -80,7 +74,5 @@ def load_font():
     times_new = ImageFont.truetype('/Users/hallowsyves/Documents/HourlyMotivation/Fonts/AUGUSTUS.TTF', 25)
     return times_new
 
-def save_quote(quote, filename):
-    with open(filename, "a") as f:
-        f.write(quote + "\n")
+    
 
