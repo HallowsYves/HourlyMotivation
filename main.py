@@ -1,6 +1,6 @@
-import hourly_motivation
 from hourly_motivation import generate_image, generate_quote, load_image, print_database
 # Generate Quote
+
 quote = generate_quote("Generate a motivational quote, without quoting anyone from history.")
 
 # Generate Image
