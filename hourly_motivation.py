@@ -1,10 +1,8 @@
 import boto3
 import openai
-import mimetypes
 import os
 import urllib
 import sqlite3
-import requests
 from handling import QuoteAlreadyInDatabaseException
 from datetime import datetime
 from dotenv import load_dotenv
