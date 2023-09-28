@@ -1,15 +1,27 @@
+import boto3
 import openai
+import mimetypes
 import os
 import urllib
 import sqlite3
+import requests
 from handling import QuoteAlreadyInDatabaseException
 from datetime import datetime
+from dotenv import load_dotenv
 from textwrap import fill
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
-#SETUP
-API_KEY = open("API_KEY", "r").read()
+# SETUP
+load_dotenv()
+
+API_KEY = os.getenv("API_KEY")
 openai.api_key = API_KEY
+
+ACCESS_KEY_ID = os.getenv("ACCESS_KEY_ID")
+SECRET_ACCESS_KEY = os.getenv("SECRET_ACCESS_KEY")
+
+s3 = boto3.client('s3',aws_access_key_id=ACCESS_KEY_ID, aws_secret_access_key=SECRET_ACCESS_KEY)
+
 
 def generate_quote(prompt):
     # Generate Quote
@@ -52,7 +64,6 @@ def save_image(url):
     return file_path
 
 
-
 def load_image(image, quote):
     # Load Background Image
     image_ = Image.open(image)
@@ -71,8 +82,32 @@ def load_image(image, quote):
 
     # Show new Image with quote
     image_.show()
-    image_.save(image)
+    image_.save('Media/Images/temp.png')
 
+    file_name = str(datetime.now()) + ".png"
+    
+    mimetype = 'image/png'
+    
+    s3.upload_file(
+        Filename='Media/Images/temp.png',
+        Bucket='hourlymotivationbgimg',
+        Key=file_name,
+        ExtraArgs={
+            "ContentType": mimetype
+        }
+    )
+
+
+    url = s3.generate_presigned_url('get_object',
+                                    Params={
+                                        'Bucket': 'hourlymotivationbgimg',
+                                        'Key': file_name,
+                                    },
+                                    ExpiresIn=3600)
+    print(url)
+    os.remove('Media/Images/temp.png')
+    os.remove(image)
+    return url
 
 
 def load_font():
@@ -101,6 +136,7 @@ def add_to_database(quote):
     connection.commit()
     cursor.close()
     connection.close()
+
 
 def print_database():
     connection = sqlite3.connect('quotes.db')
