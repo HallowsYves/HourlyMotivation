@@ -4,6 +4,8 @@ import os
 import urllib
 import sqlite3
 from handling import QuoteAlreadyInDatabaseException
+import google.generativeai as palm
+import pprint
 from datetime import datetime
 from dotenv import load_dotenv
 from textwrap import fill
@@ -21,26 +23,37 @@ SECRET_ACCESS_KEY = os.getenv("SECRET_ACCESS_KEY")
 s3 = boto3.client('s3',aws_access_key_id=ACCESS_KEY_ID, aws_secret_access_key=SECRET_ACCESS_KEY)
 
 
-def generate_quote(prompt):
-    # Generate Quote
-    response = openai.ChatCompletion.create(
-    model = "gpt-3.5-turbo",
-    messages= [
-        {"role": "user", "content": prompt}
-        ]
-    )
+# PALM API
+PALM_KEY = os.getenv("PALM_KEY")
+palm.configure(api_key=PALM_KEY)
 
-    gen_response = response['choices'][0]['message']['content']
-    # Check if it's already in the database
-    if not check_for_duplicates(gen_response):
-        raise QuoteAlreadyInDatabaseException(gen_response)  
-    
-    add_to_database(gen_response)
-    formatted_response = fill(gen_response,20)
-    return formatted_response
+models = [m for m in palm.list_models() if 'generateText' in m.supported_generation_methods]
+model = models[0].name
 
+
+
+def generate_quote(usr_prompt):
+    try:
+        quote = palm.generate_text(
+            model=model,
+            prompt=usr_prompt,
+            temperature=1.0,
+            max_output_tokens=600,
+            stop_sequences="**",
+        )
+        add_to_database(quote.result)
+        formatted_quote = fill(quote.result, 20)
+        return formatted_quote
+    except:
+        if not check_for_duplicates(quote.result):
+            raise QuoteAlreadyInDatabaseException
+
+
+
+
+
+"""
 def generate_image(usr_prompt):
-    """Generate & Return the Image to the user"""
     img_response = openai.Image.create(
         prompt=usr_prompt,
         n=1,
@@ -51,6 +64,8 @@ def generate_image(usr_prompt):
     image_location = save_image(img_url)
     print(image_location)
     return image_location
+"""
+
 
 
     
@@ -145,3 +160,17 @@ def print_database():
     for quote in quotes:
         print(quote)
     connection.close()
+
+def generate_motivational_prompt():
+    """1. Figure out how to create motivational prompt"""
+    m_prompt = palm.generate_text(
+        model=model,
+        prompt="Pick one random historical figure, and one subject correlated to that figure",
+        temperature=1.0,
+        max_output_tokens=400,
+        stop_sequences="**"
+    )
+    prompt = fill(m_prompt.result,20)
+    return prompt
+
+# Generate motivational quote, from rand person

@@ -2,7 +2,7 @@ import os
 import discord
 from dotenv import load_dotenv
 from discord.ext import commands
-from hourly_motivation import generate_image, generate_quote, load_image
+from hourly_motivation import generate_image, generate_quote, load_image, generate_motivational_prompt
 
 
 # SETUP
@@ -11,10 +11,13 @@ DISCORD_KEY = os.getenv("DISCORD_KEY")
 client = discord.Client(intents=discord.Intents.default())
 
 
-quote = generate_quote("Generate a motivational quote, without quoting anyone from history.")
+ppromt = generate_motivational_prompt()
+quote = generate_quote(f"Generate a motivational quote based on {ppromt}")
 background_img = generate_image("Beautiful Nature Background")
 
 
+# input different word  or adjetive to make the prompt different instead of it repeating
+# dictionary add to it 
 
 @client.event
 async def on_ready():
