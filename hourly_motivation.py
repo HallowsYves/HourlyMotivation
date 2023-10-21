@@ -3,9 +3,10 @@ import openai
 import os
 import urllib
 import sqlite3
+import flickr_api
+import random
 from handling import QuoteAlreadyInDatabaseException
 import google.generativeai as palm
-import pprint
 from datetime import datetime
 from dotenv import load_dotenv
 from textwrap import fill
@@ -30,6 +31,11 @@ palm.configure(api_key=PALM_KEY)
 models = [m for m in palm.list_models() if 'generateText' in m.supported_generation_methods]
 model = models[0].name
 
+# FLICKR
+FLICKR_KEY = os.getenv("FLICKR_KEY")
+FLICKR_SKEY = os.getenv("FLICKR_SKEY")
+flickr_api.set_keys(api_key=FLICKR_KEY, api_secret=FLICKR_SKEY)
+
 
 
 def generate_quote(usr_prompt):
@@ -38,7 +44,7 @@ def generate_quote(usr_prompt):
             model=model,
             prompt=usr_prompt,
             temperature=1.0,
-            max_output_tokens=600,
+            max_output_tokens=300,
             stop_sequences="**",
         )
         add_to_database(quote.result)
@@ -50,7 +56,17 @@ def generate_quote(usr_prompt):
 
 
 
+def get_image():
+    file_name = str(datetime.now()) + ".png"
+    folder_path = "/Users/hallowsyves/Documents/HourlyMotivation/Media/Images"
+    file_path = os.path.join(folder_path, file_name)
 
+
+
+    search_r = flickr_api.Photo.search(text='Nature Background', content_types=0, sorted=True)
+    random_image = random.choice(search_r)
+    flickr_api.Photo.save(self=random_image, filename=file_path, size_label='Medium 800')
+    return file_path
 
 """
 def generate_image(usr_prompt):
@@ -64,6 +80,7 @@ def generate_image(usr_prompt):
     image_location = save_image(img_url)
     print(image_location)
     return image_location
+
 """
 
 
@@ -116,7 +133,7 @@ def load_image(image, quote):
                                         'Bucket': 'hourlymotivationbgimg',
                                         'Key': file_name,
                                     },
-                                    ExpiresIn=3600)
+                                    ExpiresIn=315360000)
     print(url)
     os.remove('Media/Images/temp.png')
     os.remove(image)
