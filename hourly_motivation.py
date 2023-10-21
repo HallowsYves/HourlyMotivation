@@ -68,23 +68,6 @@ def get_image():
     flickr_api.Photo.save(self=random_image, filename=file_path, size_label='Medium 800')
     return file_path
 
-"""
-def generate_image(usr_prompt):
-    img_response = openai.Image.create(
-        prompt=usr_prompt,
-        n=1,
-        size="512x512",
-    )
-    # Retrieve Image URL & save it
-    img_url = img_response['data'][0]['url']
-    image_location = save_image(img_url)
-    print(image_location)
-    return image_location
-
-"""
-
-
-
     
 def save_image(url):
     file_name = str(datetime.now()) + ".png"
@@ -111,7 +94,6 @@ def load_image(image, quote):
     image_load.text((center_x,center_y), quote, anchor='mm', font=font, fill=(255,255,255))
 
     # Show new Image with quote
-    image_.show()
     image_.save('Media/Images/temp.png')
 
     file_name = str(datetime.now()) + ".png"
