@@ -3,9 +3,9 @@ The "HourlyMotivation"project is a dynamic and motivational Discord bot designed
 
 
 # How does it work?
-**PALM API Integration:** The project starts by utilizing the PALM API to generate a prompt. This prompt is carefully crafted to inspire and motivate users. PALM, which stands for "Pattern Learning and Matching," is an AI model capable of generating human-like text based on the input it receives.
+**PALM API Integration:** The project starts by utilizing the PALM API to generate a prompt. This prompt is to inspire and motivate users. PALM, which stands for "Pattern Learning and Matching," is an AI model capable of generating human-like text based on the input it receives.
 
-**Quote Generation:** Once the prompt is generated, HourlyMotivation cleverly passes this prompt back to itself, effectively acting as a creative loop. This self-referencing approach ensures that the generated text aligns with the motivational theme. The result is a motivational quote that is both meaningful and contextually relevant.
+**Quote Generation:** Once the prompt is generated, HourlyMotivation passes this prompt back to itself, effectively acting as a creative loop. This self-referencing approach ensures that the generated text aligns with the motivational theme. The result is a motivational quote that is both meaningful and contextually relevant.
 
 **Flickr API for Images:** To complement the text, HourlyMotivation relies on the Flickr API to fetch a random inspiring image. Flickr is a popular platform for sharing photos, and its API allows access to a vast collection of images. The selected image is designed to visually enhance the motivational message.
 
