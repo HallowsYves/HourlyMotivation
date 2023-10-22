@@ -15,8 +15,6 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 # SETUP
 load_dotenv()
 
-API_KEY = os.getenv("API_KEY")
-openai.api_key = API_KEY
 
 ACCESS_KEY_ID = os.getenv("ACCESS_KEY_ID")
 SECRET_ACCESS_KEY = os.getenv("SECRET_ACCESS_KEY")
